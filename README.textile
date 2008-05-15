@@ -1,0 +1,43 @@
+h1. GitShelve
+
+GitShelve makes it possible to store arbitrary data in a separate branch
+of a git repository
+This class was inspired and is loosely based upon John Wiegley's 
+git_shelve.py and git-issues python scripts (http://github.com/jwiegley/git-issues/tree/master)
+
+h2. Example Usage
+
+<pre>
+<code>
+  shelve = GitShelve.new("mybranch", "/path/to/repository.git")
+  sha1 = shelve.put("some data")
+
+  shelve.get(sha1)
+  #-> "some data"
+
+  sha1 = shelve.put do |f|
+    # f is an IO object streaming directly into git!
+    f.write("i can ")
+    f.write("stream my data ")
+    f.write("in chunks!")
+  end
+
+  shelve.get(sha1)
+  #-> "i can stream my data in chunks!"
+
+  shelve.get(sha1) do |f|
+    # this works the same with get!
+    data = f.read
+  end
+
+  data
+  #-> "i can stream my data in chunks!"
+</code>
+</pre>
+
+h2. Author
+
+Michael Siebert <"siebertm85@googlemail.com":siebertm85@googlemail.com>
+
+This piece of software wouldn't be possible without Git. Thanks
+go out to the people who invented git!
