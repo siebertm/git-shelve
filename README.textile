@@ -5,11 +5,11 @@ of a git repository
 This class was inspired and is loosely based upon John Wiegley's 
 git_shelve.py and git-issues python scripts (http://github.com/jwiegley/git-issues/tree/master)
 
-h2. Example Usage
+h2. Basic Usage
 
 <pre>
 <code>
-  shelve = GitShelve.new("mybranch", "/path/to/repository.git")
+  shelve = GitShelve::Shelve.new("mybranch", "/path/to/repository.git")
   sha1 = shelve.put("some data")
 
   shelve.get(sha1)
@@ -32,6 +32,40 @@ h2. Example Usage
 
   data
   #-> "i can stream my data in chunks!"
+</code>
+</pre>
+
+h2. Replication
+
+GitShelve now supports replication, which is based on git's
+distribution mechanisms (see git-fetch-pack and git-send-pack 
+manpages). Pulling and fentching from remote repositories is being
+implemented by the GitShelve::ReplicatedShelve class, so you could
+use the basic Shelve class if you don't need that stuff.
+
+Since I decided to use just the plumbing, replication is not based on
+git remotes, so you'll have to provide ReplicatedShelve with the remotes
+"by hand".
+
+Another thing that could cause errors is that you really should use the
+same branch on all remotes. I did not test it with different branches.
+
+<pre>
+<code>
+  shelve = GitShelve::ReplicatedShelve.new("mybranch", "/path/to/repository")
+  shelve.add_remote("git@example.com:remote_repo")
+  
+  # get automatically fetches from remotes if it can't find an object,
+  # so this will pull from the remote repository
+  data = shelve.get("37295dbe4bb6d980d2d8ce2dc16bfc29ab56526e")
+  
+  # you could also use this
+  shelve.fetch
+  data = shelve.get("37295dbe4bb6d980d2d8ce2dc16bfc29ab56526e")
+  
+  # now lets create some data and push it to the server
+  shelve.put("some data")
+  shelve.push
 </code>
 </pre>
 
