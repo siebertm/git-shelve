@@ -9,6 +9,13 @@ module GitShelve
     
     attr_reader :remotes
     
+    # Add a remote repository to fetch from or push to
+    #
+    # ==== Parameters
+    #   pathspec<String>:: the path to the repository. see http://www.kernel.org/pub/software/scm/git/docs/git-push.html#URLS for URLs git should understand
+    #
+    # ==== Raises
+    #   ArgumentError:: when the pathspec is empty
     def add_remote(pathspec)
       raise ArgumentError("pathspec must be valid! (pathspec=#{pathspec.inspect})") if pathspec.nil? || pathspec.empty?
       @remotes << pathspec unless @remotes.include?(pathspec)
@@ -49,12 +56,14 @@ module GitShelve
     alias_method :get_without_fetch, :get
     alias_method :get, :get_with_fetch
     
+    # fetches data from all remote repositories
     def fetch
       remotes.each do |remote|
         fetch_from(remote)
       end
     end
     
+    # sends its data to all remote repositories
     def push
       remotes.each do |remote|
         fetch_from(remote)

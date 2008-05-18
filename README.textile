@@ -5,6 +5,15 @@ of a git repository
 This class was inspired and is loosely based upon John Wiegley's 
 git_shelve.py and git-issues python scripts (http://github.com/jwiegley/git-issues/tree/master)
 
+h2. Installation
+
+You can either download the archive via "github":http://github.com/siebertm/git-shelve/tree/master
+or install the git_shelve gem:
+
+<pre>
+  sudo gem install gem install siebertm-git_shelve --source=http://gems.github.com
+</pre>
+
 h2. Basic Usage
 
 <pre>
